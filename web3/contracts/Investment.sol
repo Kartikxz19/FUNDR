@@ -17,6 +17,7 @@ contract Investment {
         bool active;// signifies whether campaign is active or not
         bool cancel;//signifies whether campaing is cancelled or not.Mainly for investors
     }
+    // Defined the basic campaign structure 
     // id =>campaign
     mapping (uint256 => Campaign) public campaigns;
     //investor=>campaign id[]
@@ -51,6 +52,7 @@ contract Investment {
 
         return numberOfCampaigns-1;
     }
+    // Function to donate to campaign 
     
     function donateToCampaign(uint256 _id) public payable {
         
@@ -89,12 +91,14 @@ contract Investment {
         }
         c.amountCollected=c.amountCollected+amount;
     }
-    //need array of donators as well as their donations
+   
+    //Function to get number of donors 
     function getDonators(uint256 _id) view public returns(address[] memory,uint256[] memory) {
         
         return(campaigns[_id].donators,campaigns[_id].donations);
 
     }
+    // Function to get campaigns 
     function getCampaigns() public view returns(Campaign[] memory) {
         //we have a mapping from id - campaign
         //so we need to create a new array of campaigns
