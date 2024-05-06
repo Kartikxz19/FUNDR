@@ -143,18 +143,18 @@ contract Investment {
         }
         return myCampaigns;
     }
-    function investedCampaigns() public view returns (Campaign[] memory) {
-        Campaign[] memory myCampaigns = new Campaign[](
-            investedCamps[msg.sender].length
-        );
+   // function investedCampaigns() public view returns (Campaign[] memory) {
+      //  Campaign[] memory myCampaigns = new Campaign[](
+          //  investedCamps[msg.sender].length
+       // );
 
-        for (uint i = 0; i < investedCamps[msg.sender].length; i++) {
+       // for (uint i = 0; i < investedCamps[msg.sender].length; i++) {
             //bring out a campaign from storage
-            Campaign storage item = campaigns[investedCamps[msg.sender][i]];
-            myCampaigns[i] = item;
-        }
-        return myCampaigns;
-    }
+          //  Campaign storage item = campaigns[investedCamps[msg.sender][i]];
+            //myCampaigns[i] = item;
+      //  }
+        //return myCampaigns;
+    //}
 
     function closeCampaign(uint256 _id) public {
         Campaign storage c = campaigns[_id];
