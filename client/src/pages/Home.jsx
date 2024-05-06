@@ -4,10 +4,10 @@ import { DisplayCampaigns } from '../components';
 const Home = () => {
   const [isLoading,setIsLoading]=useState(false);
   const [campaigns, setCampaigns] = useState([]);
-  const {address,contract,getCampaigns}=useStateContext();
+  const {address,contract,getActiveCampaigns}=useStateContext();
   const fetchCampaigns=async()=>{
     setIsLoading(true);
-    const data=await getCampaigns();
+    const data=await getActiveCampaigns();
     setCampaigns(data);
     setIsLoading(false);
   }
@@ -16,7 +16,7 @@ const Home = () => {
   }, [address,contract]);
   return (
     <DisplayCampaigns
-      title="All Campaigns"
+      title="All Active Campaigns"
       isLoading={isLoading}
       campaigns={campaigns}
     />

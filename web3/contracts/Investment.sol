@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-contract Crowdfunding {
+contract Investment {
     struct Campaign{
         uint256 id;
         address owner;
@@ -27,7 +27,7 @@ contract Crowdfunding {
     }
     function createCampaign(address _owner,string memory _title, string memory _description,uint256 _target,uint256 _deadline,string memory _image) external payable returns(uint256) {
         uint256 security=msg.value;
-        require(security==1 ether,"Security Deposit is 1 Ether");
+        require(security==0.001 ether,"Security Deposit is 0.001 Ether");
         address payable receiver=payable(address(this));//security deposit
         receiver.transfer(msg.value);
         //create a new campaign(which has to be stored permanently inside the contract => storage type) and assign it inside the compaigns mapping
@@ -48,7 +48,6 @@ contract Crowdfunding {
         //increment the number of campaigns
         numberOfCampaigns++;
         //transfer fees to contract
-        
 
         return numberOfCampaigns-1;
     }
@@ -137,7 +136,6 @@ contract Crowdfunding {
 
         for(uint i=0;i<investedCamps[msg.sender].length;i++)
         {
-            
             //bring out a campaign from storage
             Campaign storage item=campaigns[investedCamps[msg.sender][i]];
             myCampaigns[i]=item;
@@ -212,6 +210,7 @@ contract Crowdfunding {
         return myCampaigns;
 
     }
+
 }
 //donation not checked whether donating more than what is required- DONE
 
@@ -224,3 +223,5 @@ contract Crowdfunding {
 //can use which can act as an escrow account that holds money corresponding to each campaign id, till the deadline expires. If campaign cancelled in between, escrow returns money back to donators. If campaign is successful, escrow sends money to campaign creator.If deadline expires before required amount reached, campaign should be rendered cancelled.-DONE
 
 //Cnnot donate yourself- DONE
+
+//After campaign successfully completed, give the owner back his security fees.THis makes sure, no one randomly just creates a fund on whim.

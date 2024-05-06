@@ -8,7 +8,7 @@ import { calculateBarPercentage, daysLeft } from '../utils';
 import { thirdweb } from '../assets';
 const CampaignDetails = () => {
   const {state} =useLocation();//got the state from DisplayCampaigns
-  const {donate,getDonations,contract,address}=useStateContext();//got the context from our global useStateContext
+  const {closeCampaign,getYourMoneyBack,donate,getDonations,contract,address}=useStateContext();//got the context from our global useStateContext
   const [isLoading, setisLoading] = useState(false);
   const [amount, setAmount] = useState('');
   const [donators,setDonators]=useState([]);
@@ -34,6 +34,26 @@ const CampaignDetails = () => {
     await donate(state.pId,amount);
     setisLoading(false);
     navigate('/');
+  }
+  const handleRevert=async()=>{
+    setisLoading(true);
+    await getYourMoneyBack(state.pId);
+    setisLoading(false);
+    navigate('/');
+  }
+  const handleCancel=async()=>{
+    if(state.owner!==address)
+      {
+        alert("You are not the owner !");
+      }
+      else
+      {
+        setisLoading(true);
+        await closeCampaign(state.pId);
+        setisLoading(false);
+        alert("Campaign Closed !");
+        navigate('/');
+      }
   }
   return (
     <div>
@@ -104,14 +124,25 @@ const CampaignDetails = () => {
         </div>
 
         <div className="flex-1 ">
-          <h4 className='font-epilogue font-semibold text-[18px] text-white uppercase'>Fund</h4>
+
           <div className="mt-[20px] flex flex-col p-4 bg-[#1c1c24] rounded-[10px]">
             <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-[#808191]">
               Fund the campaign
             </p>
             <div className="mt-[30px]">
               <input type="number" placeholder='ETH 0.1' step="0.01" className='w-full py-[10px] sm:px-[20px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[18px] leading-[30px] placeholder:text-[#4b5264] rounded-[10px]' value={amount} onChange={(e)=>setAmount(e.target.value)}  />
-              <CustomButton btntype="button" title="Fund Campaign" styles="mt-[10px] w-full bg-[#8c6dfd]" handleClick={handleDonate}/>
+              <CustomButton btntype="button" title="Fund Campaign" styles={`mt-[10px] w-full bg-[#8c6dfd] text-white opacity-${state.active?100:45} `} active={state.active} handleClick={handleDonate}/>
+              <CustomButton btntype="button" title="Revert funds"  styles={`mt-[10px] w-full bg-[#ffff] text-[#000] opacity-${state.active?45:100}`} active={!state.active} handleClick={handleRevert}/>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 ">
+          <div className="mt-[20px] flex flex-col p-4 bg-[#1c1c24] rounded-[10px]">
+            <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-[#808191]">
+              For the owner
+            </p>
+            <div className="mt-[30px]">
+              <CustomButton btntype="button" title={state.cancel==true?'Already Cancelled':'Cancel Campaign'} styles={`mt-[10px] p-[70px] text-[20px] text-white w-full bg-[#E72929] opacity-${state.active?100:45} `} active={state.active} handleClick={handleCancel}/>
             </div>
           </div>
         </div>
